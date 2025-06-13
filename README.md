@@ -131,7 +131,7 @@ Refer to **SevenSeg74HC595::stop()** method.
 ---
 ## **countToZero()**(int **qty**);  
 ### Description:
-Modifies the value of the current count and refreshes the display to keep it updated. The counter absolute value will be decremented, independently of the sign of the current count , as long as the new value resulting is in the displayable range. If the current count was negative, the value will be incremented, if it was positive, will be incremented, with the concrete porpouse of approaching the count value to 0.
+Modifies the value of the current count and refreshes the display to keep it updated. The counter absolute value will be decremented, independently of the sign of the current count , as long as the new value resulting is in the displayable range. If the current count was negative, the value will be incremented, if it was positive, will be decremented, with the concrete purpouse of approaching the count value to 0.
 ### Parameters:  
 qty: Optional integer value, its **absolute** value will be decremente from the current absolute count value, the sign of the resulting count will be preserved. If no parameter is passed a value of one will be used.  
 ### Return value:  
