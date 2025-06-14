@@ -9,6 +9,11 @@ ClickCounter::ClickCounter(SevenSegDisplays* cntrDsplyPtr, bool rgthAlgn, bool z
 {
 }
 
+ClickCounter::ClickCounter(int32_t countMin, int32_t countMax)
+:_countMin{countMin}, _countMax{countMax}
+{   
+}
+
 ClickCounter::~ClickCounter()
 {
 }
@@ -20,31 +25,45 @@ bool ClickCounter::begin(const int32_t &startVal){
       if(_cntrDsplyPtr != nullptr){
          _countMin = _cntrDsplyPtr->getDspValMin();
          _countMax = _cntrDsplyPtr->getDspValMax();
-         if ((startVal >= _countMin) && (startVal <= _countMax)){
-            result = countRestart(startVal);
-            if (result){
-               _beginStartVal = startVal;
-               _begun = true;
-            }
+         _noDisplay = false;
+      } 
+      if(_countMin < _countMax){
+         result = countRestart(startVal);
+         if (result){
+            _beginStartVal = startVal;
+            _begun = true;
          }
-      }
+      } 
    }
 
    return result;
 }
 
 bool ClickCounter::blink(){
+   bool result{false};
+
+   if(!_noDisplay)
+      result = _cntrDsplyPtr->blink();
+   else
+      result = true;
     
-   return _cntrDsplyPtr->blink();
+   return result;
 }
 
 bool ClickCounter::blink(const unsigned long &onRate, const unsigned long &offRate){
+   bool result = false;
 
-   return _cntrDsplyPtr->blink(onRate, offRate);
+   if(!_noDisplay)
+      result = _cntrDsplyPtr->blink(onRate, offRate);
+   else
+      result = true;
+
+      return result;
 }
 
 void ClickCounter::clear(){
-   _cntrDsplyPtr->clear();
+   if(!_noDisplay)
+      _cntrDsplyPtr->clear();
 
    return;
 }
@@ -55,7 +74,10 @@ bool ClickCounter::countDown(const int32_t &qty){
 
    if((_count - locQty) >= _countMin){
       _count -= locQty;
-      result = updDisplay();
+      if(!_noDisplay)
+         result = updDisplay();
+      else
+         result = true;
    }
 
    return result;
@@ -66,12 +88,15 @@ bool ClickCounter::countReset(){
    return countRestart(_beginStartVal);
 }
     
-bool ClickCounter::countRestart(int32_t restartValue){
+bool ClickCounter::countRestart(const int32_t &restartValue){
    bool result{false};
 
    if ((restartValue >= _countMin) && (restartValue <= _countMax)){
       _count = restartValue;
-      result = updDisplay();
+      if(!_noDisplay)
+         result = updDisplay();
+      else
+         result = true;
    }
 
    return result;
@@ -94,21 +119,24 @@ bool ClickCounter::countToZero(const int32_t &qty){
       }
    }
    if(result)
-      result = updDisplay();
+      if(!_noDisplay)
+         result = updDisplay();
 
    return result;
 }
 
 bool ClickCounter::countUp(const int32_t &qty){
-    bool result {false};
-    int32_t locQty = abs(qty);
+   bool result {false};
+   int32_t locQty = abs(qty);
 
-    if((_count + locQty) <= _countMax){
-        _count += locQty;
-        result = updDisplay();
-    }
+   if((_count + locQty) <= _countMax){
+      _count += locQty;
+      result = true;
+      if(!_noDisplay)
+         result = updDisplay();
+   }
 
-    return result;
+   return result;
 }
 
 bool ClickCounter::end(){
@@ -124,7 +152,7 @@ bool ClickCounter::end(){
 
 int32_t ClickCounter::getCount(){
 
-    return _count;
+   return _count;
 }
 
 int32_t ClickCounter::getMaxCountVal(){
@@ -143,16 +171,34 @@ int ClickCounter::getStartVal(){
 }
 
 bool ClickCounter::noBlink(){
+   bool result{false};
 
-    return _cntrDsplyPtr->noBlink();
+   if(!_noDisplay)
+      result = _cntrDsplyPtr->noBlink();
+   else
+      result = true;
+    
+   return result;
 }
 
 bool ClickCounter::setBlinkRate(const unsigned long &newOnRate, const unsigned long &newOffRate){
+   bool result{false};
 
-    return _cntrDsplyPtr->setBlinkRate(newOnRate, newOffRate);
+   if(!_noDisplay)
+      result = _cntrDsplyPtr->setBlinkRate(newOnRate, newOffRate);
+   else
+      result = true;
+    
+   return result;
 }
 
 bool ClickCounter::updDisplay(){
+   bool result{false};
 
-    return _cntrDsplyPtr->print(_count, _countRgthAlgn, _countZeroPad);
+   if(!_noDisplay)
+      result = _cntrDsplyPtr->print(_count, _countRgthAlgn, _countZeroPad);
+   else
+      result = true;
+    
+   return result;
 }

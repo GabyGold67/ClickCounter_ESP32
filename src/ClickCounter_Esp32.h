@@ -5,17 +5,42 @@
 #include <stdint.h>
 #include <sevenSegDisplays.h>
 
+// Definition workaround to let a function/method return value to be a function pointer to a function that receives no arguments and returns no values: void (funcName*)()
+typedef void (*fncPtrType)();
+typedef fncPtrType (*ptrToTrnFnc)();
+
+/* Definition workaround to let a function/method return value to be a function pointer to a function that receives a void* arguments and returns no values: void (funcName*)(void*)
+Use sample (by Gemini):
+void myFunction(void* data) {
+   Cast the pointer to the appropiate data type before using it.
+   Do whatever with the data in the function, 
+}
+
+Function that returns a function pointer to the function previously defined
+ptrToTrnFncVdPtr getFunctionPointer() {
+    fncVdPtrPrmPtrType ptr = myFunction;
+    return ptr;
+}
+*/
+typedef void (*fncVdPtrPrmPtrType)(void*);
+typedef fncVdPtrPrmPtrType (*ptrToTrnFncVdPtr)(void*);
+
 class ClickCounter{
 private:
    SevenSegDisplays* _cntrDsplyPtr{nullptr};
    bool _countRgthAlgn{true};
    bool _countZeroPad{false};
 
-   bool _begun{false};
-   int32_t _countMax{0};
    int32_t _countMin{0};
-   int32_t _count{0};
+   int32_t _countMax{0};
+
    int32_t _beginStartVal{0};
+   bool _begun{false};
+   int32_t _count{0};
+   bool _noDisplay{true};
+
+   fncVdPtrPrmPtrType _fnWhnCntValZero{nullptr};
+	void* _fnWhnCntValZeroArg {nullptr};
 
 public:
    /**
@@ -26,7 +51,12 @@ public:
    /**
     * @brief Class constructor
     * 
-    * Instantiates a ClickCounter object. For details about SevenSegDisplays objects see the SevenSegDisplays_ESP32 library documentation.   
+    * Instantiates a ClickCounter object with an associated display that will autonomously exhibit the updated count value. For details about SevenSegDisplays objects see the SevenSegDisplays_ESP32 library documentation. 
+    * Having a display associated with the counter implies some of the counter characteristics will be set according to the display characteristics:
+    * - The counter minimum and maximum values will be set to the minimum and maximum displayable numbers (related to the quantity of the display's digits/port). 
+    * - Every counter modification will automatically update the display, overwriting any other value sent to the display by other sources. 
+    * - The boolean value returned by the counter modification methods will be false if the counter modification failed (overflow, underflow) OR if the counter printing to the display fails. 
+    * - Methods related to display behavior management (blink(), clear(), noblink(), setBlinkRate(), updDisplay) will only be enabled and return true boolean values for objects instantiated with associated displays and after successful execution. In any other cases will return **false**.
     * 
     * @param cntrDsplyPntr Pointer to an instantiated SevenSegDisplays class object. That object models the display used to exhibit the counter state. The SevenSegDisplays subclasses model seven segment displays objects.  
     * @param rgthAlgn (Optional) Indicates if the represented value must be displayed right aligned (true), or left aligned (false). When set true, the missing heading characters will be completed with spaces or zeros, depending in the zeroPad optional parameter. If the parameter is not specified the default value, true, will be assumed.  
@@ -34,21 +64,30 @@ public:
     */
    ClickCounter(SevenSegDisplays* cntrDsplyPntr, bool rgthAlgn = true, bool zeroPad = false);
    /**
+    * @brief Class constructor
+    * 
+    * Instantiates a ClickCounter object **without an associated display**. Not having a SevenSegDisplays object associated has as main consequence the lack of parameters to calculate the counter valid values range, so the counter minimum and maximum values must be provided at instantiation time. The begin() method will ensure the minimum requirements are met by the provided parameters, most important: the minimum < maximum condition. 
+    * 
+    * @param countMin Left side limit (minimum) for the counter values valid range segment. The valid count range minimum value is included as a valid counting value. 
+    * @param countMax Right side limit (maximum) for the counter values valid range segment. The valid count range maximum value is included as a valid counting value. 
+    */
+   ClickCounter(int32_t countMin, int32_t countMax);
+   /**
     * @brief Class destructor.  
     */
    ~ClickCounter();
    /**
     * @brief Sets the basic required parameters for the object to start working. 
     * 
-    * @param startVal Initial value for the counter. The parameter must be within the valid range, wich is calculated from the display digits quantity. 
+    * @param startVal Initial value for the counter. The parameter must be within the valid range, wich is calculated from the display digits quantity or provided as constructor parameters (depending on the constructor used to instantiate the ClickCounter object). 
     * 
-    * @return The success in setting the needed values for the object to start working
-    * @retval true The object was not previously begun, the display pointer is valid, the startVal parameter is in the valid range. The object is started.
+    * @return The success in setting the needed attribute values for the object to start working.  
+    * @retval true The object was not previously begun, the display pointer (if provided) is not a nullptr and the startVal parameter is in the valid range. The object is started.
     * @retval false One of the previously described conditions failed, the object is not ready to be used. 
     */
    bool begin(const int32_t &startVal);
     /**
-    * @brief Makes the display blink the contents it is showing.
+    * @brief Makes the display blink the contents it is showing if the object was instantiated with an associated display. 
     * 
     * The display will blink the contents it is showing until a **`noBlink()`** method is invoked. The display will continue blinking even if the contents are changed.  
     * When invoking the **`blink()`** method with no parameters the blinking pace (timings) previously set will be used. If no **`setBlinkRate(const unsigned long, const unsigned long)`** and no **`blink(const unsigned long, const unsigned long)`** with parameters was used before this call, the blinking will be symmetrical, meaning that the time the display shows the contents and the time the display is blank are equal. The on time and the off time of the blinking starts at a preset rate this first time the method is invoked.    
@@ -95,7 +134,7 @@ public:
    /**
     * @brief Clears the display, turning off all the segments and dots.
     * 
-    * @note The method will not produce any change in the count state, that will be preserved.  
+    * @note The method will not produce any change in the count state, that will be preserved. To revert the clear() method effects an updateDisplay() must be executed, or wait for the next change of the count value that will refresh the display contents automatically.  
     * 
     * Use example:  
     * @code {.cpp}
@@ -134,7 +173,7 @@ public:
     * @return true The parameter value was within valid range, count restart succeeded.
     * @return false The parameter value was NOT within valid range, count restart failed.
     */
-   bool countRestart(int32_t restartValue = 0);
+   bool countRestart(const int32_t &restartValue = 0);
 //FFDR go on checking from this point
    /**
     * @brief Modifies the counter value to approach a final 0 value. 
@@ -151,20 +190,27 @@ public:
    bool countToZero(const int32_t &qty = 1);
    bool countUp(const int32_t &qty = 1);
    bool end();
+//FFDR bool display();
    int32_t getCount();
 //FFDR   SevenSegDisplays* getCntrDsplyPtr();
+//FFDR   fncVdPtrPrmPtrType getFnWhnCntValZeroPtr();
+
    int32_t getMaxBlinkRate();
    int32_t getMaxCountVal();
    int32_t getMinBlinkRate();
    int32_t getMinCountVal();
    int32_t getStartVal();
    bool noBlink();
+//FFDR bool noDisplay();   
    bool setBlinkRate(const unsigned long &newOnRate, const unsigned long &newOffRate = 0);
-//FFDR   bool setFnCountValZero();
-//FFDR   bool setFnCountValMax();
-//FFDR   bool setFnCountValMin();
-//FFDR   bool setFnCountValGoal();
+
+//FFDR   void setFnWhnCntValZeroPtr(fncVdPtrPrmPtrType &newFnWhnCntValZeroPtr);
+
+//FFDR   setFnWhnCntValMax
+//FFDR   bool setFnWhnCntValMin
+//FFDR   bool setFnWhnCntValCntGoal
    bool updDisplay();  //To be analyzed it's current need
 };
    
-   #endif
+#endif
+

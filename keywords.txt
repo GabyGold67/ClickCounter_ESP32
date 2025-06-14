@@ -17,7 +17,10 @@ countReset    KEYWORD2
 countRestart    KEYWORD2
 countToZero KEYWORD2
 countUp KEYWORD2
+end   KEYWORD2
 getCount    KEYWORD2
+getMaxCountVal KEYWORD2
+getMinCountVal KEYWORD2
 getStartVal KEYWORD2
 noBlink     KEYWORD2
 setBlinkRate    KEYWORD2
