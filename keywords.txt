@@ -9,18 +9,21 @@ ClickCounter    KEYWORD1
 ###############################################
 # Methods and Functions (KEYWORD2)
 ###############################################
-#ClickCounter class
-###################
+begin KEYWORD2
 blink       KEYWORD2
 clear	    KEYWORD2
-countBegin  KEYWORD2
 countDown   KEYWORD2
+countIsZero KEYWORD2
 countReset    KEYWORD2
 countRestart    KEYWORD2
-countStop   KEYWORD2
 countToZero KEYWORD2
 countUp KEYWORD2
+end   KEYWORD2
 getCount    KEYWORD2
+getMaxBlinkRate   KEYWORD2
+getMaxCountVal KEYWORD2
+getMinBlinkRate   KEYWORD2
+getMinCountVal KEYWORD2
 getStartVal KEYWORD2
 noBlink     KEYWORD2
 setBlinkRate    KEYWORD2
@@ -29,5 +32,3 @@ updDisplay  KEYWORD2
 ###############################################
 # Constants (LITERAL1)
 ###############################################
-_minBlinkRate  LITERAL1
-_maxBlinkRate  LITERAL1
