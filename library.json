@@ -24,6 +24,14 @@
     "homepage": "https://www.gnu.org/licenses/gpl-3.0-standalone.html",
     "dependencies":
     [
+      {
+        "owner": "gabygold67",
+        "name": "SevenSegDisplays_ESP32",
+        "version": "",
+        "frameworks": "Arduino",
+        "platforms": "espressif32"
+  
+      }
     ] ,
 
     "frameworks": "Arduino",

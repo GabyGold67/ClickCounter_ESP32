@@ -20,7 +20,9 @@ countToZero KEYWORD2
 countUp KEYWORD2
 end   KEYWORD2
 getCount    KEYWORD2
+getMaxBlinkRate   KEYWORD2
 getMaxCountVal KEYWORD2
+getMinBlinkRate   KEYWORD2
 getMinCountVal KEYWORD2
 getStartVal KEYWORD2
 noBlink     KEYWORD2

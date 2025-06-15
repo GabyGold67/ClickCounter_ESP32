@@ -1,3 +1,28 @@
+/**
+ ******************************************************************************
+ * @file ClickCounter_Esp32.cpp
+ * 
+ * @brief Code file for the ClickCounter_Esp32 library 
+ * 
+ * @details This libray's ClickCounter class models counters and tally counters in all it's functionality, and adds an extensive set of services and options to manage more complex and demanding counting applications. The displaying services are optionally provided through the use of a SevenSegDisplays library instantiated object.
+ * 
+ * Repository: https://github.com/GabyGold67/ClickCounter_Esp32  
+ * 
+ * Framework: Arduino  
+ * Platform: ESP32  
+ * 
+ * @author Gabriel D. Goldman  
+ * mail <gdgoldman67@hotmail.com>  
+ * Github <https://github.com/GabyGold67>  
+ * 
+ * @version 1.0.0
+ * 
+ * @date First release: 20/12/2023  
+ *       Last update:   15/06/2025 18:20 (GMT+0200) DST  
+ * 
+ * @copyright Copyright (c) 2025  GPL-3.0 license
+ *******************************************************************************
+ */
 #include <ClickCounter_Esp32.h>
 
 ClickCounter::ClickCounter()
@@ -76,7 +101,7 @@ bool ClickCounter::countDown(const int32_t &qty){
       if((_count - locQty) >= _countMin){
          _count -= locQty;
          if(!_noDisplay)
-            result = updDisplay();
+            result = _updDisplay();
          else
             result = true;
       }
@@ -101,7 +126,7 @@ bool ClickCounter::countRestart(const int32_t &restartValue){
    if ((restartValue >= _countMin) && (restartValue <= _countMax)){
       _count = restartValue;
       if(!_noDisplay)
-         result = updDisplay();
+         result = _updDisplay();
       else
          result = true;
    }
@@ -128,7 +153,7 @@ bool ClickCounter::countToZero(const int32_t &qty){
       }
       if(result)
          if(!_noDisplay)
-            result = updDisplay();
+            result = _updDisplay();
    }
 
    return result;
@@ -143,7 +168,7 @@ bool ClickCounter::countUp(const int32_t &qty){
          _count += locQty;
          result = true;
          if(!_noDisplay)
-            result = updDisplay();
+            result = _updDisplay();
       }
    }
 
@@ -171,9 +196,27 @@ int32_t ClickCounter::getCount(){
    return _count;
 }
 
+int32_t ClickCounter::getMaxBlinkRate(){
+   int32_t result{0};
+
+   if(!_noDisplay)
+      result = _cntrDsplyPtr->getMaxBlinkRate();
+    
+   return result;
+}
+
 int32_t ClickCounter::getMaxCountVal(){
 
    return _countMax;
+}
+
+int32_t ClickCounter::getMinBlinkRate(){
+   int32_t result{0};
+
+   if(!_noDisplay)
+      result = _cntrDsplyPtr->getMinBlinkRate();
+    
+   return result;
 }
 
 int32_t ClickCounter::getMinCountVal(){
@@ -208,7 +251,7 @@ bool ClickCounter::setBlinkRate(const unsigned long &newOnRate, const unsigned l
    return result;
 }
 
-bool ClickCounter::updDisplay(){
+bool ClickCounter::_updDisplay(){
    bool result{false};
 
    if(!_noDisplay)
@@ -217,4 +260,9 @@ bool ClickCounter::updDisplay(){
       result = true;
     
    return result;
+}
+
+bool ClickCounter::updDisplay(){
+
+   return _updDisplay();
 }
