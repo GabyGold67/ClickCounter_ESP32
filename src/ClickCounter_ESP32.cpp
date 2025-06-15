@@ -72,15 +72,22 @@ bool ClickCounter::countDown(const int32_t &qty){
    int32_t locQty = abs(qty);
    bool result {false};
 
-   if((_count - locQty) >= _countMin){
-      _count -= locQty;
-      if(!_noDisplay)
-         result = updDisplay();
-      else
-         result = true;
+   if(locQty > 0){
+      if((_count - locQty) >= _countMin){
+         _count -= locQty;
+         if(!_noDisplay)
+            result = updDisplay();
+         else
+            result = true;
+      }
    }
 
    return result;
+}
+
+bool ClickCounter::countIsZero(){
+
+   return (_count == 0);
 }
 
 bool ClickCounter::countReset(){
@@ -106,21 +113,23 @@ bool ClickCounter::countToZero(const int32_t &qty){
    int32_t locQty = abs(qty);
    bool result {false};
 
-   if (_count > 0){
-      if((_count - locQty) >= 0){
-         _count -= locQty;
-         result = true;
+   if(locQty > 0){
+      if (_count > 0){
+         if((_count - locQty) >= 0){
+            _count -= locQty;
+            result = true;
+         }
+      }   
+      else if (_count < 0){
+         if((_count + locQty) <= 0){
+            _count += locQty;
+            result = true;
+         }
       }
-   }   
-   else if (_count < 0){
-      if((_count + locQty) <= 0){
-         _count += locQty;
-         result = true;
-      }
+      if(result)
+         if(!_noDisplay)
+            result = updDisplay();
    }
-   if(result)
-      if(!_noDisplay)
-         result = updDisplay();
 
    return result;
 }
@@ -129,11 +138,13 @@ bool ClickCounter::countUp(const int32_t &qty){
    bool result {false};
    int32_t locQty = abs(qty);
 
-   if((_count + locQty) <= _countMax){
-      _count += locQty;
-      result = true;
-      if(!_noDisplay)
-         result = updDisplay();
+   if(locQty > 0){
+      if((_count + locQty) <= _countMax){
+         _count += locQty;
+         result = true;
+         if(!_noDisplay)
+            result = updDisplay();
+      }
    }
 
    return result;
@@ -141,8 +152,13 @@ bool ClickCounter::countUp(const int32_t &qty){
 
 bool ClickCounter::end(){
    bool result{false};
-   
+
    if(_begun){
+      if(_cntrDsplyPtr != nullptr)
+         clear();
+      _countMin = 0;
+      _countMax = 0;
+      _count = 0;
       _begun = false;
       result = true;
    }

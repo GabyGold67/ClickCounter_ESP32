@@ -13,6 +13,7 @@ begin KEYWORD2
 blink       KEYWORD2
 clear	    KEYWORD2
 countDown   KEYWORD2
+countIsZero KEYWORD2
 countReset    KEYWORD2
 countRestart    KEYWORD2
 countToZero KEYWORD2

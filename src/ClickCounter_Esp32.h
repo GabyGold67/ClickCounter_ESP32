@@ -9,19 +9,7 @@
 typedef void (*fncPtrType)();
 typedef fncPtrType (*ptrToTrnFnc)();
 
-/* Definition workaround to let a function/method return value to be a function pointer to a function that receives a void* arguments and returns no values: void (funcName*)(void*)
-Use sample (by Gemini):
-void myFunction(void* data) {
-   Cast the pointer to the appropiate data type before using it.
-   Do whatever with the data in the function, 
-}
-
-Function that returns a function pointer to the function previously defined
-ptrToTrnFncVdPtr getFunctionPointer() {
-    fncVdPtrPrmPtrType ptr = myFunction;
-    return ptr;
-}
-*/
+// Definition workaround to let a function/method return value to be a function pointer to a function that receives a void* arguments and returns no values: void (funcName*)(void*)
 typedef void (*fncVdPtrPrmPtrType)(void*);
 typedef fncVdPtrPrmPtrType (*ptrToTrnFncVdPtr)(void*);
 
@@ -52,7 +40,7 @@ public:
     * @brief Class constructor
     * 
     * Instantiates a ClickCounter object with an associated display that will autonomously exhibit the updated count value. For details about SevenSegDisplays objects see the SevenSegDisplays_ESP32 library documentation. 
-    * Having a display associated with the counter implies some of the counter characteristics will be set according to the display characteristics:
+    * Having a display associated with the counter implies some of the counter object characteristics will be set according to the display characteristics:
     * - The counter minimum and maximum values will be set to the minimum and maximum displayable numbers (related to the quantity of the display's digits/port). 
     * - Every counter modification will automatically update the display, overwriting any other value sent to the display by other sources. 
     * - The boolean value returned by the counter modification methods will be false if the counter modification failed (overflow, underflow) OR if the counter printing to the display fails. 
@@ -66,7 +54,7 @@ public:
    /**
     * @brief Class constructor
     * 
-    * Instantiates a ClickCounter object **without an associated display**. Not having a SevenSegDisplays object associated has as main consequence the lack of parameters to calculate the counter valid values range, so the counter minimum and maximum values must be provided at instantiation time. The begin() method will ensure the minimum requirements are met by the provided parameters, most important: the minimum < maximum condition. 
+    * Instantiates a ClickCounter object **without an associated display**. Not having a SevenSegDisplays object associated has, as main consequence for the instantiation, the lack of parameters to calculate the counter valid values range, so the counter minimum and maximum values must be provided at instantiation time. The begin() method will ensure the minimum requirements are met by the provided parameters, most important: the minimum < maximum condition.  
     * 
     * @param countMin Left side limit (minimum) for the counter values valid range segment. The valid count range minimum value is included as a valid counting value. 
     * @param countMax Right side limit (maximum) for the counter values valid range segment. The valid count range maximum value is included as a valid counting value. 
@@ -145,25 +133,32 @@ public:
    /**
     * @brief Decrements the value of the current count. 
     * 
-    * After the counter is decremented the display is refreshed to keep it updated. The counter is decremented independently of the sign of the current count, as long as the new value resulting is in the displayable range.
+    * The counter value is successfuly decremented by the absolute value of the passed parameter. After the counter is decremented the display (if there's one associated) is refreshed to keep it updated. The counter is decremented independently of the sign of the current count, as long as the new value resulting is in the displayable range.
     * 
-    * @param qty Optional integer value, its **absolute** value will be decremented from the current count value. If no parameter is passed a value of one will be used. 
+    * @param qty Optional integer value, its **absolute** value will be decremented from the current count value. If no parameter is passed a value of one will be used. If qty = 0 the method will return false.  
     * 
-    * @return The success in decrementing the counter by the parameter absolute value. 
+    * @return The success in decrementing the counter by the parameter's absolute value. 
     * @retval true The count could be decremented by the corresponding value without setting count out of range. The counter value is decremented and the resulting count is displayed.  
-    * @retval false The count couldn't be decremented by the parameter value without getting out of range. The counter will keep its current value. 
+    * @retval false The qty parameter was equal to 0, or the count couldn't be decremented by the parameter value without getting out of range. The counter will keep its current value. 
     * 
     * @warning The returned value must be kept controled to ensure no underflow error occurs and the counter is no longer holding a valid count. 
     */
    bool countDown(const int32_t &qty = 1);
    /**
+    * @brief Returns a boolean indicating if the current count value is equal to 0 (zero) or not. 
+    * 
+    * @retval true The counter current value is 0 (zero). 
+    * @retval false The counter current value is NOT 0 (zero). 
+    */
+   bool countIsZero();   
+   /**
     * @brief Resets the counter. 
     * 
-    * Restarts the count to the original value provided when the counter was started with the begin(const int32_t &startVal) method, i.e. to startVal. The display is updated to reflect this change in its new value.  
+    * Restarts the count to the original value provided when the counter was started with the begin(const int32_t &startVal) method, i.e. to **startVal**. The display is updated to reflect this change in its new value.  
     * 
     * @return true
     * 
-    * @note The startVal value might not necesarily be 0. If the counter needs to be restarted from a determined value use bool countRestart(int32_t) 
+    * @note The startVal value might not necesarily be 0. If the counter needs to be restarted from a determined value see bool countRestart(int32_t) 
     */
    bool countReset();
    /**
@@ -174,20 +169,32 @@ public:
     * @return false The parameter value was NOT within valid range, count restart failed.
     */
    bool countRestart(const int32_t &restartValue = 0);
-//FFDR go on checking from this point
    /**
-    * @brief Modifies the counter value to approach a final 0 value. 
+    * @brief Increments or decrements the counter value to approach a final 0 value. 
     * 
     * The counter **absolute** value will be decremented, independently of the sign of the current count, and the sign of the qty parameter: If the current count value was negative, the value will be incremented, if it was positive, will be decremented, with the concrete purpouse of approaching the count value to 0 (zero).
     * The function will decrement the absolute value of the count as long as abs(count) - abs(qyt) >= 0. 
     * 
-    * @param qty Optional integer value, its **absolute** value will be decremente from the current absolute count value, the sign of the resulting count will be preserved. If no parameter is passed a default value of 1 (one) will be used.
+    * @param qty Optional integer value, its **absolute value** will be decremente from the current **absolute count value**, the sign of the resulting count will be preserved. If no parameter is passed a default value of 1 (one) will be used.
     * @retval true The absolute value of the count minus the absolute value of the parameter resulted in a value greater or equal to 0, i.e. abs(count) - abs(qyt) >= 0. The count is modified. 
-    * @return false The absolute value of the count minus the absolute value of the parameter resulted in a value smaller than 0, i.e. a negative value. The count will NOT be modified.
+    * @return false The qty parameter passed value is 0, or the absolute value of the count minus the absolute value of the parameter resulted in a value smaller than 0, i.e. a negative value. The count will NOT be modified.
     * 
-    * @note If the count has reached a zero value 
+    * @note If the count has reached a zero value no further countToZero(const int32_t &) methods would modify the counter, returning always false.
     */
    bool countToZero(const int32_t &qty = 1);
+   /**
+    * @brief Increments the value of the current count. 
+    * 
+    * The counter value is incremented by the absolute value of the passed parameter. After the counter is successfuly incremented the display (if there's one associated) is refreshed to keep it updated. The counter is incremented independently of the sign of the current count, as long as the new value resulting is in the displayable range.
+    * 
+    * @param qty Optional integer value, its **absolute** value will be incremented in the current count value. If no parameter is passed a value of one will be used. If qty = 0 the method will return false.  
+    * 
+    * @return The success in incrementing the counter by the parameter's absolute value. 
+    * @retval true The count could be incremented by the corresponding value without setting count out of range. The counter value is incremented and the resulting count is displayed (if a display is set).  
+    * @retval false The qty parameter was equal to 0, or the count couldn't be incremented by the parameter value without getting out of range. The counter will keep its current value. 
+    * 
+    * @warning The returned value must be kept controled to ensure no overflow error occurs and the counter is no longer holding a valid count. 
+    */
    bool countUp(const int32_t &qty = 1);
    bool end();
 //FFDR bool display();
