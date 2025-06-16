@@ -55,6 +55,13 @@ typedef fncPtrType (*ptrToTrnFnc)();
 typedef void (*fncVdPtrPrmPtrType)(void*);
 typedef fncVdPtrPrmPtrType (*ptrToTrnFncVdPtr)(void*);
 
+/**
+ * @class ClickCounter
+ * 
+ * @brief The ClickCounter class models "Click Counters" a.k.a. "Tally Counters". 
+ * 
+ * Traditional click counters and tally counters are devices composed by a 'counter display' (rotating wheel counter, circular dial counter, electronic display, etc.), an 'increment count' signal provider (in the form of mechanical pushbutton or rotating arm, or electronic input signal pin), and a reset signal provider (in the form of mechanical pushbutton, rotating dial or electronic input signal pin). This libray's ClickCounter class models counters and tally counters in all it's functionality, and adds an extensive set of services and options to manage more complex and demanding counting applications. The displaying services are provided through the use of a SevenSegDisplays' library instantiated object.
+ */
 class ClickCounter{
 private:
    SevenSegDisplays* _cntrDsplyPtr{nullptr};

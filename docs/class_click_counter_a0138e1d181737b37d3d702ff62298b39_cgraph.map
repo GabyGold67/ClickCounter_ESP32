@@ -1,0 +1,5 @@
+<map id="ClickCounter::end" name="ClickCounter::end">
+<area shape="rect" id="Node000001" title="Disables the counter for further activities." alt="" coords="5,5,132,32"/>
+<area shape="rect" id="Node000002" href="$class_click_counter.html#ac501676871c934b9841b4802d0c066fe" title="Clears the display, turning off all the segments and dots." alt="" coords="180,5,313,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="132,16,164,16,164,21,132,21"/>
+</map>

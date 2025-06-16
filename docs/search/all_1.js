@@ -1,0 +1,8 @@
+var searchData=
+[
+  ['begin_0',['begin',['../class_click_counter.html#adf394b97e7a3965a484479a82955bc8c',1,'ClickCounter']]],
+  ['blink_1',['blink',['../C:/Users/DevPadawan/Documents/My Projects/Training Projects/LibsDev_ESP32/lib/ClickCounter_ESP32/README.md#blink',1,'<b>blink</b>();'],['../class_click_counter.html#a7ba45e99dbe4c7d05d29b71ee7ff4158',1,'ClickCounter::blink()'],['../class_click_counter.html#a76fdc1d6efb244098bdd47f268dff29e',1,'ClickCounter::blink(const unsigned long &amp;onRate, const unsigned long &amp;offRate=0)']]],
+  ['blink_20unsigned_20long_20onrate_20unsigned_20long_20offrate_2',['&lt;b&gt;blink&lt;/b&gt;(unsigned long &lt;b&gt;onRate&lt;/b&gt;,unsigned long &lt;b&gt;offRate&lt;/b&gt;);',['../C:/Users/DevPadawan/Documents/My Projects/Training Projects/LibsDev_ESP32/lib/ClickCounter_ESP32/README.md#blinkunsigned-long-onrateunsigned-long-offrate',1,'']]],
+  ['bool_20rgthalgn_20bool_20zeropad_3',['&lt;b&gt;ClickCounter&lt;/b&gt;(uint8_t &lt;b&gt;sclk&lt;/b&gt;, uint8_t &lt;b&gt;rclk&lt;/b&gt;, uint8_t &lt;b&gt;dio&lt;/b&gt;, bool &lt;b&gt;rgthAlgn&lt;/b&gt;, bool &lt;b&gt;zeroPad&lt;/b&gt;)',['../C:/Users/DevPadawan/Documents/My Projects/Training Projects/LibsDev_ESP32/lib/ClickCounter_ESP32/README.md#clickcounteruint8_t-sclk-uint8_t-rclk-uint8_t-dio-bool-rgthalgn-bool-zeropad',1,'']]],
+  ['bool_20zeropad_4',['&lt;b&gt;ClickCounter&lt;/b&gt;(uint8_t &lt;b&gt;sclk&lt;/b&gt;, uint8_t &lt;b&gt;rclk&lt;/b&gt;, uint8_t &lt;b&gt;dio&lt;/b&gt;, bool &lt;b&gt;rgthAlgn&lt;/b&gt;, bool &lt;b&gt;zeroPad&lt;/b&gt;)',['../C:/Users/DevPadawan/Documents/My Projects/Training Projects/LibsDev_ESP32/lib/ClickCounter_ESP32/README.md#clickcounteruint8_t-sclk-uint8_t-rclk-uint8_t-dio-bool-rgthalgn-bool-zeropad',1,'']]]
+];
