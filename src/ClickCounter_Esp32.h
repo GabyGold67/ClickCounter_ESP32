@@ -98,11 +98,11 @@ public:
     * - The boolean value returned by the counter modification methods will be false if the counter modification failed (overflow, underflow) OR if the counter printing to the display fails. 
     * - Methods related to display behavior management (blink(), clear(), noblink(), setBlinkRate(), _updDisplay) will only be enabled and return true boolean values for objects instantiated with associated displays and after successful execution. In any other cases will return **false**.
     * 
-    * @param cntrDsplyPntr Pointer to an instantiated SevenSegDisplays class object. That object models the display used to exhibit the counter state. The SevenSegDisplays subclasses model seven segment displays objects.  
+    * @param cntrDsplyPtr Pointer to an instantiated SevenSegDisplays class object. That object models the display used to exhibit the counter state. The SevenSegDisplays subclasses model seven segment displays objects.  
     * @param rgthAlgn (Optional) Indicates if the represented value must be displayed right aligned (true), or left aligned (false). When set true, the missing heading characters will be completed with spaces or zeros, depending in the zeroPad optional parameter. If the parameter is not specified the default value, true, will be assumed.  
     * @param zeroPad (Optional) Indicates if the heading free spaces of the integer right aligned displayed must be filled with zeros (true) or spaces (false). If not specified the default value, false, will be assumed.  
     */
-   ClickCounter(SevenSegDisplays* cntrDsplyPntr, bool rgthAlgn = true, bool zeroPad = false);
+   ClickCounter(SevenSegDisplays* cntrDsplyPtr, bool rgthAlgn = true, bool zeroPad = false);
    /**
     * @brief Class constructor
     * 
@@ -119,13 +119,15 @@ public:
    /**
     * @brief Sets the basic required parameters for the object to start working. 
     * 
-    * @param startVal Initial value for the counter. The parameter must be within the valid range, wich is calculated from the display digits quantity or provided as constructor parameters (depending on the constructor used to instantiate the ClickCounter object). 
+    * @param startVal (Optional) Initial value for the counter, if no parameter is provided a default value of 0 (zero) will be used. The parameter must be within the valid range, wich is calculated from the display digits quantity or provided as constructor parameters (depending on the constructor used to instantiate the ClickCounter object). 
     * 
     * @return The success in setting the needed attribute values for the object to start working.  
     * @retval true The object was not previously begun, the display pointer (if provided) is not a nullptr and the startVal parameter is in the valid range. The object is started.
     * @retval false One of the previously described conditions failed, the object is not ready to be used. 
+    * 
+    * @attention If no startVal parameter is provided the default value 0 (zero) will be used. Keep in mind that begin() without parameter provided will fail if 
     */
-   bool begin(const int32_t &startVal);
+   bool begin(const int32_t &startVal = 0);
     /**
     * @brief Makes the display blink the contents it is showing if the object was instantiated with an associated display. 
     * 
