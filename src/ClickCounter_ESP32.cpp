@@ -18,7 +18,7 @@
  * @version 1.0.0
  * 
  * @date First release: 20/12/2023  
- *       Last update:   15/06/2025 18:20 (GMT+0200) DST  
+ *       Last update:   17/06/2025 17:30 (GMT+0200) DST  
  * 
  * @copyright Copyright (c) 2025  GPL-3.0 license
  *******************************************************************************

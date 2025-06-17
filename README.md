@@ -1,5 +1,7 @@
 # **Included Methods for ClickCounter class**  
 
+## [Complete library documentation HERE!](https://gabygold67.github.io/ClickCounter_ESP32/)
+
 |Method | Parameters|
 |---|---|
 |**_ClickCounter_** |SevenSegDisplays* **cntrDsplyPtr**(, bool **rgthAlgn**(, bool **zeroPad**))|
@@ -25,4 +27,3 @@
 |**noBlink()**|None|
 |**setBlinkRate()**|unsigned long **newOnRate**, (unsigned long **newOffRate**)|
 |**updDisplay()**|None|
-
