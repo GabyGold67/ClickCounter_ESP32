@@ -18,7 +18,7 @@
  * @version 1.0.0
  * 
  * @date First release: 20/12/2023  
- *       Last update:   15/06/2025 18:20 (GMT+0200) DST  
+ *       Last update:   17/06/2025 17:30 (GMT+0200) DST  
  * 
  * @copyright Copyright (c) 2025  GPL-3.0 license  
  *******************************************************************************
@@ -40,12 +40,12 @@
   * If I promised you the moon and the stars, would you believe it?  
  *******************************************************************************
  */
-#ifndef _CLICKCOUNTER_H_
-#define _CLICKCOUNTER_H_
+#ifndef _CLICKCOUNTER_ESP32_H_
+#define _CLICKCOUNTER_ESP32_H_
 
 #include<Arduino.h>
 #include <stdint.h>
-#include <sevenSegDisplays.h>
+#include <SevenSegDisplays.h>
 
 // Definition workaround to let a function/method return value to be a function pointer to a function that receives no arguments and returns no values: void (funcName*)()
 typedef void (*fncPtrType)();
@@ -55,6 +55,13 @@ typedef fncPtrType (*ptrToTrnFnc)();
 typedef void (*fncVdPtrPrmPtrType)(void*);
 typedef fncVdPtrPrmPtrType (*ptrToTrnFncVdPtr)(void*);
 
+/**
+ * @class ClickCounter
+ * 
+ * @brief The ClickCounter class models "Click Counters" a.k.a. "Tally Counters". 
+ * 
+ * Traditional click counters and tally counters are devices composed by a 'counter display' (rotating wheel counter, circular dial counter, electronic display, etc.), an 'increment count' signal provider (in the form of mechanical pushbutton or rotating arm, or electronic input signal pin), and a reset signal provider (in the form of mechanical pushbutton, rotating dial or electronic input signal pin). This libray's ClickCounter class models counters and tally counters in all it's functionality, and adds an extensive set of services and options to manage more complex and demanding counting applications. The displaying services are provided through the use of a SevenSegDisplays' library instantiated object.
+ */
 class ClickCounter{
 private:
    SevenSegDisplays* _cntrDsplyPtr{nullptr};
@@ -73,6 +80,7 @@ private:
 	void* _fnWhnCntValZeroArg {nullptr};
 
  protected:
+   SemaphoreHandle_t _CCCountMutex; // Mutex to protect the _count value from concurrent access
    bool _updDisplay();
 
 public:
@@ -91,11 +99,11 @@ public:
     * - The boolean value returned by the counter modification methods will be false if the counter modification failed (overflow, underflow) OR if the counter printing to the display fails. 
     * - Methods related to display behavior management (blink(), clear(), noblink(), setBlinkRate(), _updDisplay) will only be enabled and return true boolean values for objects instantiated with associated displays and after successful execution. In any other cases will return **false**.
     * 
-    * @param cntrDsplyPntr Pointer to an instantiated SevenSegDisplays class object. That object models the display used to exhibit the counter state. The SevenSegDisplays subclasses model seven segment displays objects.  
+    * @param cntrDsplyPtr Pointer to an instantiated SevenSegDisplays class object. That object models the display used to exhibit the counter state. The SevenSegDisplays subclasses model seven segment displays objects.  
     * @param rgthAlgn (Optional) Indicates if the represented value must be displayed right aligned (true), or left aligned (false). When set true, the missing heading characters will be completed with spaces or zeros, depending in the zeroPad optional parameter. If the parameter is not specified the default value, true, will be assumed.  
     * @param zeroPad (Optional) Indicates if the heading free spaces of the integer right aligned displayed must be filled with zeros (true) or spaces (false). If not specified the default value, false, will be assumed.  
     */
-   ClickCounter(SevenSegDisplays* cntrDsplyPntr, bool rgthAlgn = true, bool zeroPad = false);
+   ClickCounter(SevenSegDisplays* cntrDsplyPtr, bool rgthAlgn = true, bool zeroPad = false);
    /**
     * @brief Class constructor
     * 
@@ -112,13 +120,15 @@ public:
    /**
     * @brief Sets the basic required parameters for the object to start working. 
     * 
-    * @param startVal Initial value for the counter. The parameter must be within the valid range, wich is calculated from the display digits quantity or provided as constructor parameters (depending on the constructor used to instantiate the ClickCounter object). 
+    * @param startVal (Optional) Initial value for the counter, if no parameter is provided a default value of 0 (zero) will be used. The parameter must be within the valid range, wich is calculated from the display digits quantity or provided as constructor parameters (depending on the constructor used to instantiate the ClickCounter object). 
     * 
     * @return The success in setting the needed attribute values for the object to start working.  
     * @retval true The object was not previously begun, the display pointer (if provided) is not a nullptr and the startVal parameter is in the valid range. The object is started.
     * @retval false One of the previously described conditions failed, the object is not ready to be used. 
+    * 
+    * @attention If no startVal parameter is provided the default value 0 (zero) will be used. Keep in mind that begin() without parameter provided will fail if 
     */
-   bool begin(const int32_t &startVal);
+   bool begin(const int32_t &startVal = 0);
     /**
     * @brief Makes the display blink the contents it is showing if the object was instantiated with an associated display. 
     * 
@@ -353,5 +363,5 @@ public:
    bool updDisplay();
 };
    
-#endif
+#endif   // _CLICKCOUNTER_ESP32_H_
 

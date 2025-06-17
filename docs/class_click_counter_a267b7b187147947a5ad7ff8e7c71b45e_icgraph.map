@@ -1,0 +1,7 @@
+<map id="ClickCounter::countRestart" name="ClickCounter::countRestart">
+<area shape="rect" id="Node000001" title="Restarts the count from the value provided as parameter. The display is updated to reflect this chang..." alt="" coords="226,31,406,57"/>
+<area shape="rect" id="Node000002" href="$class_click_counter.html#ae5bb19c852135e076ad6626ec2e688b6" title="Sets the basic required parameters for the object to start working." alt="" coords="23,5,160,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,35,160,29,161,24,211,29"/>
+<area shape="rect" id="Node000003" href="$class_click_counter.html#af9c4f4b8608bcf520800020a1f50e173" title="Resets the counter." alt="" coords="5,56,178,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="211,59,178,62,178,57,210,53"/>
+</map>
