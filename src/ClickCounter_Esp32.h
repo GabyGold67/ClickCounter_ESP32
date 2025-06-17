@@ -40,12 +40,12 @@
   * If I promised you the moon and the stars, would you believe it?  
  *******************************************************************************
  */
-#ifndef _CLICKCOUNTER_H_
-#define _CLICKCOUNTER_H_
+#ifndef _CLICKCOUNTER_ESP32_H_
+#define _CLICKCOUNTER_ESP32_H_
 
 #include<Arduino.h>
 #include <stdint.h>
-#include <sevenSegDisplays.h>
+#include <SevenSegDisplays.h>
 
 // Definition workaround to let a function/method return value to be a function pointer to a function that receives no arguments and returns no values: void (funcName*)()
 typedef void (*fncPtrType)();
@@ -362,5 +362,5 @@ public:
    bool updDisplay();
 };
    
-#endif
+#endif   // _CLICKCOUNTER_ESP32_H_
 

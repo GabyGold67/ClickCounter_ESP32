@@ -1,7 +1,7 @@
 var searchData=
 [
   ['clear_0',['clear',['../class_click_counter.html#ac501676871c934b9841b4802d0c066fe',1,'ClickCounter']]],
-  ['clickcounter_1',['ClickCounter',['../class_click_counter.html#a8e5d5b91956a83a1b050e660ba08b8e8',1,'ClickCounter::ClickCounter()'],['../class_click_counter.html#a5df70da24303c0d994b5dda46f96a62c',1,'ClickCounter::ClickCounter(SevenSegDisplays *cntrDsplyPntr, bool rgthAlgn=true, bool zeroPad=false)'],['../class_click_counter.html#aed33c8e1200045d158d6a15d29572977',1,'ClickCounter::ClickCounter(int32_t countMin, int32_t countMax)']]],
+  ['clickcounter_1',['ClickCounter',['../class_click_counter.html#a8e5d5b91956a83a1b050e660ba08b8e8',1,'ClickCounter::ClickCounter()'],['../class_click_counter.html#adcabc1975d828e1ee9f671c7c3de6799',1,'ClickCounter::ClickCounter(SevenSegDisplays *cntrDsplyPtr, bool rgthAlgn=true, bool zeroPad=false)'],['../class_click_counter.html#aed33c8e1200045d158d6a15d29572977',1,'ClickCounter::ClickCounter(int32_t countMin, int32_t countMax)']]],
   ['countdown_2',['countDown',['../class_click_counter.html#ab879315c6f0b0c0adad4a3ed23625aee',1,'ClickCounter']]],
   ['countiszero_3',['countIsZero',['../class_click_counter.html#a276d4363836e80bee4d8530af2c66c38',1,'ClickCounter']]],
   ['countreset_4',['countReset',['../class_click_counter.html#af9c4f4b8608bcf520800020a1f50e173',1,'ClickCounter']]],

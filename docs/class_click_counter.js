@@ -1,10 +1,10 @@
 var class_click_counter =
 [
     [ "ClickCounter", "class_click_counter.html#a8e5d5b91956a83a1b050e660ba08b8e8", null ],
-    [ "ClickCounter", "class_click_counter.html#a5df70da24303c0d994b5dda46f96a62c", null ],
+    [ "ClickCounter", "class_click_counter.html#adcabc1975d828e1ee9f671c7c3de6799", null ],
     [ "ClickCounter", "class_click_counter.html#aed33c8e1200045d158d6a15d29572977", null ],
     [ "~ClickCounter", "class_click_counter.html#add0d83119345530af5e01d74d280695a", null ],
-    [ "begin", "class_click_counter.html#adf394b97e7a3965a484479a82955bc8c", null ],
+    [ "begin", "class_click_counter.html#ae5bb19c852135e076ad6626ec2e688b6", null ],
     [ "blink", "class_click_counter.html#a7ba45e99dbe4c7d05d29b71ee7ff4158", null ],
     [ "blink", "class_click_counter.html#a76fdc1d6efb244098bdd47f268dff29e", null ],
     [ "clear", "class_click_counter.html#ac501676871c934b9841b4802d0c066fe", null ],
