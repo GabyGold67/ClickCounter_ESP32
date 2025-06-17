@@ -16,7 +16,7 @@
  * Github <https://github.com/GabyGold67>
  *
  * @date First release: 16/06/2025  
- *       Last update:   17/06/2025 15:00 GMT+0200 DST  
+ *       Last update:   17/06/2025 17:30 GMT+0200 DST  
  ******************************************************************************
   * @warning **Use of this library is under your own responsibility**
   * 
