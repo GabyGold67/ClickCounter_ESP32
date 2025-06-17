@@ -80,6 +80,7 @@ private:
 	void* _fnWhnCntValZeroArg {nullptr};
 
  protected:
+   SemaphoreHandle_t _CCCountMutex; // Mutex to protect the _count value from concurrent access
    bool _updDisplay();
 
 public:

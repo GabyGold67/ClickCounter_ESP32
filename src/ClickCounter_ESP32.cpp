@@ -32,11 +32,13 @@ ClickCounter::ClickCounter()
 ClickCounter::ClickCounter(SevenSegDisplays* cntrDsplyPtr, bool rgthAlgn, bool zeroPad)
 :_cntrDsplyPtr{cntrDsplyPtr}, _countRgthAlgn{rgthAlgn}, _countZeroPad{zeroPad}
 {
+   _CCCountMutex = xSemaphoreCreateMutex();
 }
 
 ClickCounter::ClickCounter(int32_t countMin, int32_t countMax)
 :_countMin{countMin}, _countMax{countMax}
 {   
+   _CCCountMutex = xSemaphoreCreateMutex();
 }
 
 ClickCounter::~ClickCounter()
@@ -98,12 +100,15 @@ bool ClickCounter::countDown(const int32_t &qty){
    bool result {false};
 
    if(locQty > 0){
-      if((_count - locQty) >= _countMin){
-         _count -= locQty;
-         if(!_noDisplay)
-            result = _updDisplay();
-         else
-            result = true;
+      if(xSemaphoreTake(_CCCountMutex, portMAX_DELAY) == pdTRUE){
+         if((_count - locQty) >= _countMin){
+            _count -= locQty;
+            if(!_noDisplay)
+               result = _updDisplay();
+            else
+               result = true;
+         }
+         xSemaphoreGive(_CCCountMutex);
       }
    }
 
@@ -111,8 +116,14 @@ bool ClickCounter::countDown(const int32_t &qty){
 }
 
 bool ClickCounter::countIsZero(){
+   bool result{false};
 
-   return (_count == 0);
+   if(xSemaphoreTake(_CCCountMutex, portMAX_DELAY) == pdTRUE){
+      result = (_count == 0);
+      xSemaphoreGive(_CCCountMutex);
+   }
+
+   return result;
 }
 
 bool ClickCounter::countReset(){
@@ -124,11 +135,14 @@ bool ClickCounter::countRestart(const int32_t &restartValue){
    bool result{false};
 
    if ((restartValue >= _countMin) && (restartValue <= _countMax)){
-      _count = restartValue;
-      if(!_noDisplay)
-         result = _updDisplay();
-      else
-         result = true;
+      if(xSemaphoreTake(_CCCountMutex, portMAX_DELAY) == pdTRUE){
+         _count = restartValue;
+         if(!_noDisplay)
+            result = _updDisplay();
+         else
+            result = true;
+         xSemaphoreGive(_CCCountMutex);
+      }
    }
 
    return result;
@@ -139,21 +153,24 @@ bool ClickCounter::countToZero(const int32_t &qty){
    bool result {false};
 
    if(locQty > 0){
-      if (_count > 0){
-         if((_count - locQty) >= 0){
-            _count -= locQty;
-            result = true;
+      if(xSemaphoreTake(_CCCountMutex, portMAX_DELAY) == pdTRUE){
+         if (_count > 0){
+            if((_count - locQty) >= 0){
+               _count -= locQty;
+               result = true;
+            }
+         }   
+         else if (_count < 0){
+            if((_count + locQty) <= 0){
+               _count += locQty;
+               result = true;
+            }
          }
-      }   
-      else if (_count < 0){
-         if((_count + locQty) <= 0){
-            _count += locQty;
-            result = true;
-         }
+         if(result)
+            if(!_noDisplay)
+               result = _updDisplay();
+         xSemaphoreGive(_CCCountMutex);
       }
-      if(result)
-         if(!_noDisplay)
-            result = _updDisplay();
    }
 
    return result;
@@ -164,11 +181,14 @@ bool ClickCounter::countUp(const int32_t &qty){
    int32_t locQty = abs(qty);
 
    if(locQty > 0){
-      if((_count + locQty) <= _countMax){
-         _count += locQty;
-         result = true;
-         if(!_noDisplay)
-            result = _updDisplay();
+      if(xSemaphoreTake(_CCCountMutex, portMAX_DELAY) == pdTRUE){
+         if((_count + locQty) <= _countMax){
+            _count += locQty;
+            result = true;
+            if(!_noDisplay)
+               result = _updDisplay();
+         }
+         xSemaphoreGive(_CCCountMutex);
       }
    }
 
@@ -179,21 +199,30 @@ bool ClickCounter::end(){
    bool result{false};
 
    if(_begun){
-      if(_cntrDsplyPtr != nullptr)
-         clear();
-      _countMin = 0;
-      _countMax = 0;
-      _count = 0;
-      _begun = false;
-      result = true;
+      if(xSemaphoreTake(_CCCountMutex, portMAX_DELAY) == pdTRUE){
+         if(_cntrDsplyPtr != nullptr)
+            clear();
+         _countMin = 0;
+         _countMax = 0;
+         _count = 0;
+         _begun = false;
+         result = true;
+         xSemaphoreGive(_CCCountMutex);
+      }
    }
 
    return result;
 }
 
 int32_t ClickCounter::getCount(){
+   int32_t result{0};
 
-   return _count;
+   if(xSemaphoreTake(_CCCountMutex, portMAX_DELAY) == pdTRUE){
+      result = _count;
+      xSemaphoreGive(_CCCountMutex);
+   }
+
+   return result;
 }
 
 int32_t ClickCounter::getMaxBlinkRate(){
@@ -263,6 +292,11 @@ bool ClickCounter::_updDisplay(){
 }
 
 bool ClickCounter::updDisplay(){
+   bool result{false};
+      if(xSemaphoreTake(_CCCountMutex, portMAX_DELAY) == pdTRUE){
+         result = _updDisplay();
+         xSemaphoreGive(_CCCountMutex);
+      }
 
-   return _updDisplay();
+   return result;
 }
