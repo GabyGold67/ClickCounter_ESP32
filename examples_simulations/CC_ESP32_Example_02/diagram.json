@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "author": "Gaby Goldman",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 9.6, "left": 72.04, "attrs": {} },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn1",
+      "top": 188.6,
+      "left": 192,
+      "attrs": { "color": "red", "label": "LftHnd(1)", "key": "1", "xray": "1" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn2",
+      "top": 188.6,
+      "left": 278.4,
+      "attrs": { "color": "green", "label": "RghtHnd(2)", "key": "2", "xray": "1" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn3",
+      "top": 188.6,
+      "left": 374.4,
+      "attrs": { "color": "yellow", "label": "FtSwcth(0)", "key": "0", "xray": "1" }
+    },
+    { "type": "wokwi-junction", "id": "j10", "top": 139.2, "left": 52.8, "attrs": {} },
+    { "type": "wokwi-junction", "id": "j11", "top": 148.8, "left": 52.8, "attrs": {} },
+    { "type": "wokwi-junction", "id": "j12", "top": 168, "left": 52.8, "attrs": {} },
+    { "type": "wokwi-junction", "id": "j13", "top": 52.8, "left": 187.2, "attrs": {} },
+    { "type": "wokwi-junction", "id": "j14", "top": 43.2, "left": 187.2, "attrs": {} },
+    { "type": "wokwi-junction", "id": "j15", "top": 81.6, "left": 187.2, "attrs": {} },
+    {
+      "type": "wokwi-text",
+      "id": "text2",
+      "top": 48,
+      "left": 201.6,
+      "attrs": { "text": "I2C_SCL" }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "text3",
+      "top": 76.8,
+      "left": 201.6,
+      "attrs": { "text": "I2C_SDA" }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "text4",
+      "top": 28.8,
+      "left": 201.6,
+      "attrs": { "text": "SPI_MOSI" }
+    },
+    { "type": "wokwi-junction", "id": "j16", "top": 100.8, "left": 196.8, "attrs": {} },
+    {
+      "type": "wokwi-text",
+      "id": "text5",
+      "top": 96,
+      "left": 211.2,
+      "attrs": { "text": "SPI_MISO" }
+    },
+    { "type": "wokwi-junction", "id": "j17", "top": 110.4, "left": 196.8, "attrs": {} },
+    {
+      "type": "wokwi-text",
+      "id": "text6",
+      "top": 105.6,
+      "left": 211.2,
+      "attrs": { "text": "SPI_CLK" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn4",
+      "top": 188.6,
+      "left": 480,
+      "attrs": { "color": "blue", "label": "CntRst(9)", "key": "0", "xray": "1" }
+    },
+    {
+      "type": "wokwi-tm1637-7segment",
+      "id": "sevseg1",
+      "top": -96.04,
+      "left": 93.43,
+      "attrs": { "color": "red" }
+    },
+    { "type": "wokwi-vcc", "id": "vcc3", "top": -124.04, "left": 297.6, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "btn3:1.l", "esp:GND.3", "black", [ "v-57.6", "h-182.4", "v-48" ] ],
+    [ "esp:2", "btn2:2.l", "green", [ "h96", "v47.8" ] ],
+    [ "esp:GND.3", "btn2:1.l", "black", [ "h19.2", "v48", "h86.4" ] ],
+    [ "esp:GND.3", "btn1:1.l", "black", [ "h19.2", "v105.6" ] ],
+    [ "j10:J", "esp:14", "white", [ "v0" ] ],
+    [ "esp:12", "j11:J", "white", [ "v0" ] ],
+    [ "esp:13", "j12:J", "white", [ "h0" ] ],
+    [ "esp:22", "j13:J", "white", [ "h0" ] ],
+    [ "esp:23", "j14:J", "white", [ "h0" ] ],
+    [ "esp:21", "j15:J", "white", [ "h0" ] ],
+    [ "esp:19", "j16:J", "white", [ "h0" ] ],
+    [ "esp:18", "j17:J", "white", [ "h0" ] ],
+    [ "esp:15", "btn1:2.l", "red", [ "v0", "h9.6", "v38.4" ] ],
+    [ "esp:0", "btn3:2.l", "yellow", [ "h192", "v57.4" ] ],
+    [ "esp:4", "btn4:2.l", "blue", [ "h297.6", "v67.2" ] ],
+    [ "esp:GND.3", "btn4:1.l", "black", [ "h19.2", "v48", "h288" ] ],
+    [ "esp:GND.3", "sevseg1:GND", "black", [ "h105.6", "v-134.4" ] ],
+    [ "sevseg1:VCC", "vcc3:VCC", "red", [ "h124.8" ] ],
+    [ "esp:17", "sevseg1:DIO", "cyan", [ "h9.6", "v-9.6", "h105.6", "v-182.4" ] ],
+    [ "esp:16", "sevseg1:CLK", "limegreen", [ "h9.6", "v-9.6", "h115.2", "v-201.6" ] ]
+  ],
+  "dependencies": {}
+}

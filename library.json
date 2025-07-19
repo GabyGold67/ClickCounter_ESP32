@@ -32,7 +32,7 @@
         "platforms": "espressif32"
   
       }
-    ] ,
+    ],
 
     "frameworks": "Arduino",
     "platforms": "espressif32"
